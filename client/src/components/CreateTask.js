@@ -1,6 +1,6 @@
 import React, { useState, useContext, useEffect } from "react";
 import axios from "axios";
-import { useParams } from "react-router-dom";
+import { useParams,useNavigate } from "react-router-dom";
 import { ExampleContext } from "../ExampleContext.js";
 
 function CreateTask() {
@@ -14,6 +14,7 @@ function CreateTask() {
   const { usernamestore } = useContext(ExampleContext);
   const [task_description, setTaskdescription] = useState("");
   const plan_app_Acronym = useParams();
+  const navigate = useNavigate();
 
   const getrnumber = async () => {
     await axios
@@ -40,6 +41,10 @@ function CreateTask() {
         alert("success");
       });
   };
+
+  const backtokaaban=()=>{
+    navigate(`/application/${plan_app_Acronym.appname}`)
+  }
 
   useEffect(() => {
     getrnumber();// eslint-disable-next-line
@@ -106,9 +111,9 @@ function CreateTask() {
         </div>
       </div>
       <div>
-        {/* <button className="button" onClick={}>
+        <button className="button" onClick={backtokaaban}>
           Back
-        </button> */}
+        </button>
       </div>
     </div>
   );

@@ -60,7 +60,7 @@ function EditIndividualTask() {
   };
 
   const goback = () => {
-    navigate(-1);
+    navigate(`/application/${gettask_plan.Plan_app_Acronym}`);
   };
 
   useEffect(() => {

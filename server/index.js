@@ -664,10 +664,11 @@ app.post("/edittask", function (req, res) {
         if (err) {
           console.log(err);
         } else {
-          if (task_notes === null || task_notes === "") {
+          if (existingplan===null||existingplan==="") {
+            let timestamp = Plantimestamp + task_notes
             db.query(
               "UPDATE task SET Task_notes=? WHERE Task_id=?",
-              [Plantimestamp, taskid],
+              [timestamp, taskid],
               (err, result) => {
                 if (err) {
                   console.log(err);
