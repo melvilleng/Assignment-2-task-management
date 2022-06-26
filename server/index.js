@@ -40,7 +40,7 @@ const db = mysql.createConnection({
   user: "root",
   host: "localhost",
   password: "password",
-  database: "kaaban",
+  database: "new_schema",
 });
 
 //test connection into database
