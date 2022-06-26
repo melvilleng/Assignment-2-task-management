@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useParams,useNavigate} from "react-router-dom";
 import { ExampleContext } from "../ExampleContext.js";
 import axios from "axios";
 import moment from "moment";
@@ -12,6 +12,17 @@ function Kaabanboard() {
   const [showtask, setShowtask] = useState([]);
   const [boardupdate, setBoardupdate] = useState(0);
   const { usernamestore } = useContext(ExampleContext);
+  const [checkonepermit,setCheckpermit]= useState("");
+  const navigate= useNavigate();
+
+  const checkpermit=()=>{
+    axios.post("/checkpermit",{username:usernamestore,appname:acronym_name}).then((response)=>{
+      setCheckpermit(response.data)
+      console.log(response.data)
+    })
+  }
+
+
 
   const showallplan = async () => {
     await axios.get(`/showplan/${acronym_name}`).then((response) => {
@@ -62,9 +73,15 @@ function Kaabanboard() {
       });
   };
 
+  const createtaskbtn=()=>{
+    navigate(`/create-task/${app_acronym.appname}`)
+  }
+
+
   useEffect(() => {
     showallplan();
     showalltask(); // eslint-disable-next-line
+    checkpermit();
   }, [boardupdate]);
 
   return (
@@ -110,9 +127,15 @@ function Kaabanboard() {
         </div>
       </div>
       <div className="testcontainer">
-        <Link to={`/create-task/${app_acronym.appname}`}>
-          <button className="float-right">Create Task</button>
-        </Link>
+        
+         
+        
+        {checkonepermit.permit_create ?<button onClick={createtaskbtn} className="float-right">Create Task</button>:""}
+         
+        
+       
+        {console.log(checkonepermit.permit_create)}
+        
         <div className="rightcontainer p-0">
           <h1 className="h3 mb-3">Kanban Board</h1>
           <div className="row">
@@ -144,6 +167,13 @@ function Kaabanboard() {
                                 view
                               </button>
                             </Link>
+                            {console.log(checkonepermit.permit_open)
+                            // checkonepermit.permit_open ?<Link to={`/edittask/${eachtask.Task_id}`}>
+                            //   <button className="btn btn-primary btn-block">
+                            //     Edit
+                            //   </button>
+                            // </Link>:""}
+                    }
                             <button
                               onClick={() =>
                                 promote_task(

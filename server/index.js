@@ -365,6 +365,60 @@ app.post("/checkgroup", function (req, res) {
   );
 });
 
+//check permit
+app.post("/checkpermit",function(req,res){
+  const username = req.body.username;
+  const appname = req.body.appname;
+  db.query(
+    "SELECT usergroup FROM accounts WHERE username=?",
+    [username],
+    (err, result) => {
+      if (err) {
+        console.log(err);
+      }else{
+      console.log(result[0].usergroup);
+      let usergroup = result[0].usergroup.split(",")
+      
+      
+      db.query("SELECT App_permit_Create FROM application WHERE App_Acronym=?",[appname],(err,permit)=>{
+        if(usergroup.filter(create=>create===permit[0].App_permit_Create) && permit[0].App_permit_Create!==""){
+          console.log(usergroup.filter(create=>create===permit[0].App_permit_Create))
+          res.send({permit_create:true,permit_open:false,permit_todo:false,permit_doing:false,permit_done:false})
+        }else{
+          db.query("SELECT App_permit_Open FROM application WHERE App_Acronym=?",[appname],(err,permit)=>{
+            if(usergroup.filter(open=>open===permit[0].App_permit_Open)&& permit[0].App_permit_Create!==""){
+              res.send({permit_create:false,permit_open:true,permit_todo:false,permit_doing:false,permit_done:false})
+              console.log("test")
+            }else{
+              db.query("SELECT App_permit_toDoList FROM application WHERE App_Acronym=?",[appname],(err,permit)=>{
+                if(usergroup.includes(permit[0].App_permit_toDoList)&& permit[0].App_permit_Create!==""){
+                  res.send({permit_create:false,permit_open:false,permit_todo:true,permit_doing:false,permit_done:false})
+                }else{
+                  db.query("SELECT App_permit_Doing FROM application WHERE App_Acronym=?",[appname],(err,permit)=>{
+                    if(usergroup.includes(permit[0].App_permit_Doing)&& permit[0].App_permit_Create!==""){
+                      res.send({permit_create:false,permit_open:false,permit_todo:false,permit_doing:true,permit_done:false})
+                    }else{
+                      db.query("SELECT App_permit_Done FROM application WHERE App_Acronym=?",[appname],(err,permit)=>{
+                        if(usergroup.includes(permit[0].App_permit_Done)&& permit[0].App_permit_Create!==""){
+                          res.send({permit_create:false,permit_open:false,permit_todo:false,permit_doing:false,permit_done:true})
+                        }else{
+                          res.send({permit_create:false,permit_open:false,permit_todo:false,permit_doing:false,permit_done:false})
+                        }
+                      })
+                    }
+                  })
+                }
+              })
+            }
+          })
+        }
+      })
+      }
+      
+    }
+  );
+})
+
 //create application
 app.post("/create_application", function (req, res) {
   const app_acronym = req.body.app_acronym;
