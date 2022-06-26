@@ -13,6 +13,12 @@ function EditApplication() {
   const [startdate, setStartdate] = useState(date);
   const [enddate, setEnddate] = useState(date);
   const { appname } = useParams();
+  const [usergroup,setshowUsergroup]=useState([])
+  const [permit_open, setpermit_open] = useState("");
+  const [permit_create, setpermit_create] = useState("");
+  const [permit_todolist, setpermit_todolist] = useState("");
+  const [permit_Doing, setpermitDoing] = useState("");
+  const [permit_Done, setpermitDone] = useState("");
   const navigate = useNavigate();
 
   const edit_description = () => {
@@ -58,12 +64,85 @@ function EditApplication() {
     });
   };
 
+  const listUsergroup = async () => {
+    await axios.get("/showusergroup").then(
+      (response) => {
+        setshowUsergroup(response.data);
+        console.log(response.data);
+      },
+      (error) => {
+        console.log(error);
+      }
+    );
+  };
+
+  const editpermit_open = () => {
+    axios
+      .post("/edit_permit", {
+        appname: appname,
+        app_open: permit_open,
+      })
+      .then(() => {
+        console.log("success");
+        alert("success");
+      });
+  };
+
+  const editpermit_create = () => {
+    axios
+      .post("/edit_permit", {
+        appname: appname,
+        app_create: permit_create,
+      })
+      .then(() => {
+        console.log("success");
+        alert("success");
+      });
+  };
+
+  const editpermit_todo = () => {
+    axios
+      .post("/edit_permit", {
+        appname: appname,
+        app_todo:permit_todolist,
+      })
+      .then(() => {
+        console.log("success");
+        alert("success");
+      });
+  };
+
+  const editpermit_doing = () => {
+    axios
+      .post("/edit_permit", {
+        appname: appname,
+        app_doing:permit_Doing,
+      })
+      .then(() => {
+        console.log("success");
+        alert("success");
+      });
+  };
+
+  const editpermit_done = () => {
+    axios
+      .post("/edit_permit", {
+        appname: appname,
+        app_done:permit_Done
+      })
+      .then(() => {
+        console.log("success");
+        alert("success");
+      });
+  };
+
   const backtoapplication =()=>{
     navigate("/application")
   }
 
   useEffect(() => {
     showallapplication(); // eslint-disable-next-line
+    listUsergroup(); // eslint-disable-next-line
   }, []);
   return (
     <div>
@@ -148,10 +227,122 @@ function EditApplication() {
 
             <button
               onClick={edit_enddate}
-              className="py-3 mt-4 btn btn-m btn-success btn-block"
+              className="py-3 mt-4 mb-3 btn btn-m btn-success btn-block"
             >
               Edit End Date
             </button>
+            <div>
+            <div>
+                <label>
+                <h6>Permit Create:</h6>
+              </label>
+            <select
+                      onChange={(event) => {
+                        setpermit_create(event.target.value);
+                      }}
+                    >
+                      <option value={showapp.App_permit_Create} selected>
+                      {showapp.App_permit_Create}
+                      </option>
+                      {usergroup.map((usergroupinfo, usergroup) => {
+                        return (
+                          <option key={usergroup}>
+                            {usergroupinfo.usergroup_name}
+                          </option>
+                        );
+                      })}
+                    </select>
+                    <button onClick={editpermit_create} className="permitbtn ml-2">Edit</button>
+                    </div>
+                    <div>
+                    <label>
+                <h6>Permit Open:</h6>
+              </label>
+            <select
+                      onChange={(event) => {
+                        setpermit_open(event.target.value);
+                      }}
+                    >
+                      <option value={showapp.App_permit_Open} selected>
+                      {showapp.App_permit_Open}
+                      </option>
+                      {usergroup.map((usergroupinfo, usergroup) => {
+                        return (
+                          <option key={usergroup}>
+                            {usergroupinfo.usergroup_name}
+                          </option>
+                        );
+                      })}
+                    </select>
+                    <button onClick={editpermit_open} className="permitbtn ml-2">Edit</button>
+                    </div>
+                    <div>
+                    <label>
+                <h6>Permit to-do-list:</h6>
+              </label>
+            <select
+                      onChange={(event) => {
+                        setpermit_todolist(event.target.value);
+                      }}
+                    >
+                      <option value=" ">
+                        Select your option
+                      </option>
+                      {usergroup.map((usergroupinfo, usergroup) => {
+                        return (
+                          <option key={usergroup}>
+                            {usergroupinfo.usergroup_name}
+                          </option>
+                        );
+                      })}
+                    </select>
+                    <button onClick={editpermit_todo} className="permitbtn ml-2">Edit</button>
+                    </div>
+                    <div>
+                    <label>
+                <h6>Permit Doing:</h6>
+              </label>
+            <select
+                      onChange={(event) => {
+                        setpermitDoing(event.target.value);
+                      }}
+                    >
+                      <option value=" ">
+                        Select your option
+                      </option>
+                      {usergroup.map((usergroupinfo, usergroup) => {
+                        return (
+                          <option key={usergroup}>
+                            {usergroupinfo.usergroup_name}
+                          </option>
+                        );
+                      })}
+                    </select>
+                    <button onClick={editpermit_doing} className="permitbtn ml-2">Edit</button>
+                    </div>
+                    <div>
+                    <label>
+                <h6>Permit Done:</h6>
+              </label>
+            <select
+                      onChange={(event) => {
+                        setpermitDone(event.target.value);
+                      }}
+                    >
+                      <option value={" "}>
+                        Select your option
+                      </option>
+                      {usergroup.map((usergroupinfo, usergroup) => {
+                        return (
+                          <option key={usergroup}>
+                            {usergroupinfo.usergroup_name}
+                          </option>
+                        );
+                      })}
+                    </select>
+                    <button onClick={editpermit_done} className="permitbtn ml-2">Edit</button>
+                    </div>
+                    </div>
           </form>
         </div>
       </div>

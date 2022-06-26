@@ -461,6 +461,78 @@ app.post("/edit_application", function (req, res) {
   }
 });
 
+//edit permit
+app.post("/edit_permit",function(req,res){
+  const app_open=req.body.app_open
+  const app_create=req.body.app_create
+  const app_todo=req.body.app_todo
+  const app_doing=req.body.app_doing
+  const app_done=req.body.app_done
+  const appname= req.body.appname
+  if(app_open){
+    db.query(
+      "UPDATE application SET App_permit_Open=? WHERE App_Acronym=?",
+      [app_open,appname],
+      (err, results) => {
+        if (err) {
+          console.log(err);
+        } else {
+          console.log("application values updated");
+        }
+      }
+    );
+  }else if(app_create){
+    db.query(
+      "UPDATE application SET App_permit_Create=? WHERE App_Acronym=?",
+      [app_create,appname],
+      (err, results) => {
+        if (err) {
+          console.log(err);
+        } else {
+          console.log("application values updated");
+        }
+      }
+    );
+  }else if(app_todo){
+    db.query(
+      "UPDATE application SET App_permit_toDoList=? WHERE App_Acronym=?",
+      [app_todo,appname],
+      (err, results) => {
+        if (err) {
+          console.log(err);
+        } else {
+          console.log("application values updated");
+        }
+      }
+    );
+  }else if(app_doing){
+  db.query(
+    "UPDATE application SET App_permit_Doing=? WHERE App_Acronym=?",
+    [app_doing,appname],
+    (err, results) => {
+      if (err) {
+        console.log(err);
+      } else {
+        console.log("application values updated");
+      }
+    }
+  )}else if(app_done){
+    db.query(
+      "UPDATE application SET App_permit_Done=? WHERE App_Acronym=?",
+      [app_done,appname],
+      (err, results) => {
+        if (err) {
+          console.log(err);
+        } else {
+          console.log("application values updated");
+        }
+      }
+    );
+  }else{
+    console.log("error")
+  }
+})
+
 //create plan
 app.post("/create_plan", function (req, res) {
   const plan_mvp_name = req.body.plan_mvp_name;
