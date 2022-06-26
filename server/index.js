@@ -372,10 +372,15 @@ app.post("/create_application", function (req, res) {
   const app_description = req.body.app_description;
   const app_start_date = req.body.app_start_date;
   const app_end_date = req.body.app_end_date;
+  const app_open=req.body.app_open
+  const app_create=req.body.app_create
+  const app_todo=req.body.app_todo
+  const app_doing=req.body.app_doing
+  const app_done=req.body.app_done
 
   db.query(
-    "INSERT INTO application (App_Acronym,App_Rnumber,App_Description,App_startDate,App_endDate) VALUES (?,?,?,?,?)",
-    [app_acronym, app_rnumber, app_description, app_start_date, app_end_date],
+    "INSERT INTO application (App_Acronym,App_Rnumber,App_Description,App_startDate,App_endDate,App_permit_Create,App_permit_Open,App_permit_toDoList,App_permit_Doing,App_permit_Done) VALUES (?,?,?,?,?,?,?,?,?,?)",
+    [app_acronym, app_rnumber, app_description, app_start_date, app_end_date,app_create,app_open,app_todo,app_doing,app_done],
     (err, results) => {
       if (err) {
         console.log(err);
