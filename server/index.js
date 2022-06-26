@@ -437,7 +437,7 @@ app.post("/edit_application", function (req, res) {
         if (err) {
           console.log(err);
         } else {
-          console.log("update");
+          console.log("update start date");
         }
       }
     )
@@ -449,7 +449,7 @@ app.post("/edit_application", function (req, res) {
         if (err) {
           console.log(err);
         } else {
-          console.log("update");
+          console.log("update end date");
         }
       }
     )
@@ -463,22 +463,27 @@ app.post("/create_plan", function (req, res) {
   const plan_end_date = req.body.plan_end_date;
   const plan_app_acronym = req.body.plan_app_Acronym;
 
+  try{
   db.query(
     "INSERT INTO plan (Plan_MVP_name,Plan_startDate,Plan_endDate,Plan_app_Acronym) VALUES (?,?,?,?)",
     [plan_mvp_name, plan_start_date, plan_end_date, plan_app_acronym],
     (err, results) => {
+      
       if (err) {
         console.log(err);
+        res.send({message:"Plan name taken"})
       } else {
-        res.send("application values inserted");
+        res.send({message:"Success"});
       }
     }
-  );
+    )}catch{
+      res.send({message:"Plan name taken"})
+    }
+  
 });
 
 //show all plan link to project
 app.get("/showplan/:appname", function (req, res) {
-  // const plan_app_acronym = req.params.acronym_name;
   db.query(
     "SELECT * FROM plan WHERE Plan_app_Acronym=?",
     [req.params.appname],
@@ -491,6 +496,48 @@ app.get("/showplan/:appname", function (req, res) {
     }
   );
 });
+
+//show one plan link to project
+app.get("/showoneplan/:planname", function (req, res) {
+  db.query(
+    "SELECT * FROM plan WHERE Plan_MVP_name=?",
+    [req.params.planname],
+    (err, result) => {
+      if (err) {
+        console.log(err);
+      } else {
+        res.send(result);
+      }
+    }
+  );
+});
+
+//edit plan
+app.post("/edit_plan",function(req,res){
+  const plan_start_date=req.body.plan_start_date
+  const plan_end_date=req.body.plan_end_date
+  const plan_name= req.body.plan_mvp_name
+  if(plan_start_date){
+  db.query(
+    "UPDATE plan SET Plan_startDate=? WHERE Plan_MVP_name=?",[plan_start_date,plan_name],(err,result)=>{
+      if(err){
+        console.log(err)
+      }else{
+        res.send({message:"Plan Start Date Updated"})
+      }
+    }
+  )}else if(plan_end_date){
+    db.query(
+      "UPDATE plan SET Plan_endDate=? WHERE Plan_MVP_name=?",[plan_end_date,plan_name],(err,result)=>{
+        if(err){
+          console.log(err)
+        }else{
+          res.send({message:"Plan End Date Updated"})
+        }
+      }
+    )
+  }
+})
 
 //create task
 app.post("/createtask", function (req, res) {

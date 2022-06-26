@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { useParams } from "react-router-dom";
+import { useParams,useNavigate } from "react-router-dom";
 import moment from "moment";
 
 function EditApplication() {
@@ -13,7 +13,7 @@ function EditApplication() {
   const [startdate, setStartdate] = useState(date);
   const [enddate, setEnddate] = useState(date);
   const { appname } = useParams();
-  console.log(appname);
+  const navigate = useNavigate();
 
   const edit_description = () => {
     axios
@@ -58,8 +58,12 @@ function EditApplication() {
     });
   };
 
+  const backtoapplication =()=>{
+    navigate("/application")
+  }
+
   useEffect(() => {
-    showallapplication();
+    showallapplication(); // eslint-disable-next-line
   }, []);
   return (
     <div>
@@ -152,9 +156,9 @@ function EditApplication() {
         </div>
       </div>
       <div>
-        {/* <button className="button" onClick={}>
+        <button className="button" onClick={backtoapplication}>
           Back
-        </button> */}
+        </button>
       </div>
     </div>
   );

@@ -97,6 +97,9 @@ function Kaabanboard() {
                           End Date:{" "}
                           {moment(indv_plan.Plan_endDate).format("DD-MM-YYYY")}
                         </p>
+                        <Link to={`/editplan/${indv_plan.Plan_MVP_name}`}>
+                        <button>Edit</button>
+                        </Link>
                       </div>
                     </div>
                   </div>

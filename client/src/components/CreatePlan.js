@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
-import { useParams } from "react-router-dom";
+import { useParams,useNavigate } from "react-router-dom";
 
 function CreatePlan() {
   const current = new Date();
@@ -11,7 +11,8 @@ function CreatePlan() {
   const [startdate, setStartdate] = useState(date);
   const [enddate, setEnddate] = useState(date);
   const plan_app_Acronym = useParams();
-  console.log(plan_app_Acronym.appname);
+  const navigate = useNavigate();
+
 
   const createNewPlan = () => {
     axios
@@ -21,11 +22,15 @@ function CreatePlan() {
         plan_end_date: enddate,
         plan_app_Acronym: plan_app_Acronym.appname,
       })
-      .then(() => {
+      .then((response) => {
         console.log("success");
-        alert("success");
+        alert(response.data.message);
       });
   };
+
+  const backtokaaban=()=>{
+    navigate(`/application/${plan_app_Acronym.appname}`)
+  }
   return (
     <div>
       <div id="create-application" className="container py-md-5">
@@ -88,9 +93,9 @@ function CreatePlan() {
         </div>
       </div>
       <div>
-        {/* <button className="button" onClick={}>
+        <button className="button" onClick={backtokaaban}>
           Back
-        </button> */}
+        </button>
       </div>
     </div>
   );
