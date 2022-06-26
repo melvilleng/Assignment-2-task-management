@@ -15,11 +15,33 @@ function EditApplication() {
   const { appname } = useParams();
   console.log(appname);
 
-  const editNewApplication = () => {
+  const edit_description = () => {
     axios
       .post("/edit_application", {
         app_description: description,
+        appname: appname,
+      })
+      .then(() => {
+        console.log("success");
+        alert("success");
+      });
+  };
+
+  const edit_startdate = () => {
+    axios
+      .post("/edit_application", {
         app_start_date: startdate,
+        appname: appname,
+      })
+      .then(() => {
+        console.log("success");
+        alert("success");
+      });
+  };
+
+  const edit_enddate = () => {
+    axios
+      .post("/edit_application", {
         app_end_date: enddate,
         appname: appname,
       })
@@ -66,35 +88,54 @@ function EditApplication() {
                 }}
               />
             </div>
-            <h1>{moment(showapp.App_startDate).format("YYYY-MM-DD")}</h1>
+            <button
+              onClick={edit_description}
+              className="py-3 mt-4 btn btn-m btn-success btn-block"
+            >
+              Edit Description
+            </button>
             <div className="form-group">
               <label htmlFor="startdate" className="text-muted mb-1">
                 <small>Start Date</small>
+              </label>
+              <p>{moment(showapp.App_startDate).format("DD-MM-YYYY")}</p>
+              <label htmlFor="enddate" className="text-muted mb-1">
+                <small>End Date</small>
+              </label>
+              <p>{moment(showapp.App_endDate).format("DD-MM-YYYY")}</p>
+             </div>
+
+            
+            <div className="form-group">
+              <label htmlFor="startdate" className="text-muted mb-1">
+                <small>Edit Start Date</small>
               </label>
               <input
                 id="start-date"
                 className="form-control"
                 type="date"
                 placeholder={moment(showapp.App_startDate).format("YYYY-MM-DD")}
-                defaultValue={moment(showapp.App_startDate).format(
-                  "YYYY-MM-DD"
-                )}
                 onChange={(event) => {
                   setStartdate(event.target.value);
                 }}
               />
             </div>
+            <button
+              onClick={edit_startdate}
+              className="py-3 mt-4 btn btn-success btn-block"
+            >
+              Edit Start Date
+            </button>
 
             <div className="form-group">
               <label htmlFor="enddate" className="text-muted mb-1">
-                <small>End Date</small>
+                <small>Edit End Date</small>
               </label>
               <input
                 id="end-date"
                 className="form-control"
                 type="date"
                 placeholder={moment(showapp.App_endDate).format("YYYY-MM-DD")}
-                defaultValue={moment(showapp.App_endDate).format("YYYY-MM-DD")}
                 onChange={(event) => {
                   setEnddate(event.target.value);
                 }}
@@ -102,10 +143,10 @@ function EditApplication() {
             </div>
 
             <button
-              onClick={editNewApplication}
-              className="py-3 mt-4 btn btn-lg btn-success btn-block"
+              onClick={edit_enddate}
+              className="py-3 mt-4 btn btn-m btn-success btn-block"
             >
-              Create New Application
+              Edit End Date
             </button>
           </form>
         </div>

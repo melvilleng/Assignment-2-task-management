@@ -418,17 +418,42 @@ app.post("/edit_application", function (req, res) {
   const app_start_date = req.body.app_start_date;
   const app_end_date = req.body.app_end_date;
   const appname = req.body.appname;
+  if(app_description){
   db.query(
-    "UPDATE application SET App_Description=?,App_startDate=?,App_endDate=? WHERE App_Acronym=?",
-    [app_description, app_start_date, app_end_date, appname],
+    "UPDATE application SET App_Description=? WHERE App_Acronym=?",
+    [app_description,appname],
     (err, result) => {
       if (err) {
         console.log(err);
       } else {
-        console.log("update");
+        console.log("update description");
       }
     }
-  );
+  )} else if(app_start_date){
+    db.query(
+      "UPDATE application SET App_startDate=? WHERE App_Acronym=?",
+      [app_start_date,appname],
+      (err, result) => {
+        if (err) {
+          console.log(err);
+        } else {
+          console.log("update");
+        }
+      }
+    )
+  }else if(app_end_date){
+    db.query(
+      "UPDATE application SET App_endDate=? WHERE App_Acronym=?",
+      [app_end_date, appname],
+      (err, result) => {
+        if (err) {
+          console.log(err);
+        } else {
+          console.log("update");
+        }
+      }
+    )
+  }
 });
 
 //create plan
